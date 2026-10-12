@@ -39,17 +39,18 @@ count="Number of messages (1-100)"
 app_commands.Choice(name=str(n), value=n)
 for n in range(1, MAX_MESSAGES + 1)
 ])
+
 async def sendmsg(
-interaction: discord.Interaction,
-message: str,
-count: app_commands.Choice[int]
+    interaction: discord.Interaction,
+    message: str,
+    count: app_commands.Choice[int]
 ):
-if interaction.guild is None or interaction.channel is None:
-await interaction.response.send_message(
-"Use this command inside a Group,Dm,server.",
-ephemeral=True
-)
-return
+    if interaction.guild is None or interaction.channel is None:
+        await interaction.response.send_message(
+            "Use this command inside a server.",
+            ephemeral=True
+        )
+        return
 
 now = time.monotonic()  
 last_used = user_last_used.get(interaction.user.id, 0)  
