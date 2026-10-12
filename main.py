@@ -55,51 +55,37 @@ async def sendmsg(
     # Baaki function ka code bhi yahin
     # 4 spaces indentation ke saath hoga
 
-now = time.monotonic()  
-last_used = user_last_used.get(interaction.user.id, 0)  
-remaining = USER_COOLDOWN - (now - last_used)  
 
-if remaining > 0:  
-    await interaction.response.send_message(  
-        f"Please wait {int(remaining) + 1}s before starting another test.",  
-        ephemeral=True  
-    )  
-    return
+    now = time.monotonic()
+    last_used = user_last_used.get(interaction.user.id, 0)
+    remaining = USER_COOLDOWN - (now - last_used)
 
-safe_message = (  
-    message.replace("@\u200beveryone", "@everyone")  
-    .replace("@here", "@\u200bhere")  
-)[:1800]   
+    if remaining > 0:
+        await interaction.response.send_message(
+            f"Please wait {int(remaining) + 1}s before trying again.",
+            ephemeral=True
+        )
+        return
 
-async with active_lock:  
-    if channel_id in active_tests:  
-        await interaction.response.send_message(  
-            "A test is already chodi ka rahi randi ki in this channel.",  
-            ephemeral=True  
-        )  
-        return  
-    active_tests.add(none)  
+    channel_id = interaction.channel.id
+    safe_message = message[:1800]
 
-user_last_used[interaction.user.id] = now  
+    user_last_used[interaction.user.id] = now
 
-await interaction.response.send_message(  
-    f"Starting a controlled test of {count.value} message(s).",  
-    ephemeral=True  
-)  
+    await interaction.response.send_message(
+        "Test started.",
+        ephemeral=True
+    )
 
-try:  
-    for index in range(count.value):  
-        await channel.send(  
-            Spam_message,  
-            allowed_mentions=discord.AllowedMentions.true()  
-        )  
-        if index < count.value - 1:  
-            await asyncio.sleep(INTERVAL)  
-except discord.Forbidden:  
-    print("Missing permission to send messages.")  
-except discord.HTTPException as error:  
-    print(f"Discord API error: {error}")  
-finally:  
+    try:
+        await interaction.channel.send(
+            spam_message,
+            allowed_mentions=discord.AllowedMentions.none()
+        )
+    except discord.Forbidden:
+        print("Missing permission to send messages.")
+    except discord.HTTPException as error:
+        print(f"Discord API error: {error}")
     async with active_lock:  
         active_tests.discard(channel_id)
 
