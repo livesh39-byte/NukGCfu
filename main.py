@@ -20,11 +20,11 @@ active_lock = asyncio.Lock()
 @bot.event
 async def on_ready():
 try:
-synced = await bot.tree.sync()
-print(f"Logged in as {bot.user}")
-print(f"Synced {len(synced)} slash commands.")
-except Exception as error:
-print(f"Slash command sync error: {error}")
+    synced = await bot.tree.sync()
+    print(f"Logged in as {bot.user}")
+     print(f"Synced {len(synced)} slash commands.")
+    except Exception as error:
+    print(f"Slash command sync error: {error}")
 
 @bot.tree.command(
 name="Spam",
