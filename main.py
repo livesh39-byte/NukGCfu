@@ -28,7 +28,7 @@ async def on_ready():
 
 
 @bot.tree.command(
-name="Spam",
+name="spam",
 description="GC FUCKING SPAMS "
 )
 @app_commands.describe(
