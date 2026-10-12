@@ -101,28 +101,33 @@ finally:
         active_tests.discard(channel_id)
 
 @bot.tree.command(
-name="Pornstatus",
-description="Check Porn Gc status"
+    name="botstatus",
+    description="Check bot status"
 )
 async def botstatus(interaction: discord.Interaction):
-embed = discord.Embed(
-title="Bot Status",
-color=discord.Color.gold()
-)
-embed.add_field(name="Status", value="Online", inline=True)
-embed.add_field(
-name="Max messages per test",
-value=str(MAX_MESSAGES),
-inline=True
-)
-embed.add_field(
-name="Interval",
-value=f"{INTERVAL:g} second(s)",
-inline=True
-)
-await interaction.response.send_message(
-embed=embed,
-ephemeral=True
+    embed = discord.Embed(
+        title="Bot Status",
+        color=discord.Color.gold()
+    )
+    embed.add_field(
+        name="Status",
+        value="Online",
+        inline=True
+    )
+    embed.add_field(
+        name="Max messages per test",
+        value=str(MAX_MESSAGES),
+        inline=True
+    )
+    embed.add_field(
+        name="Interval",
+        value=f"{INTERVAL:g} second(s)",
+        inline=True
+    )
+
+    await interaction.response.send_message(
+        embed=embed,
+        ephemeral=True
 )
 
 if name == "main":
