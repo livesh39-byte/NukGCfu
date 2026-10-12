@@ -52,6 +52,9 @@ async def sendmsg(
         )
         return
 
+    # Baaki function ka code bhi yahin
+    # 4 spaces indentation ke saath hoga
+
 now = time.monotonic()  
 last_used = user_last_used.get(interaction.user.id, 0)  
 remaining = USER_COOLDOWN - (now - last_used)  
@@ -61,7 +64,7 @@ if remaining > 0:
         f"Please wait {int(remaining) + 1}s before starting another test.",  
         ephemeral=True  
     )  
-    return  
+    return
 
 safe_message = (  
     message.replace("@\u200beveryone", "@everyone")  
