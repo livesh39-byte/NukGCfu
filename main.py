@@ -129,8 +129,9 @@ async def botstatus(interaction: discord.Interaction):
         embed=embed,
         ephemeral=True
 )
+    
+if __name__ == "__main__":
+    if not TOKEN:
+        raise RuntimeError("DISCORD_TOKEN is missing.")
 
-if name == "main":
-if not TOKEN:
-raise RuntimeError("DISCORD_TOKEN is missing.")
-bot.run(TOKEN)
+    bot.run(TOKEN)
