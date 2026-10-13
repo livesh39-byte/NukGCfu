@@ -132,13 +132,16 @@ async def botstatus(interaction: discord.Interaction):
         ephemeral=True
 )
     
-    async def main():
+
+async def main():
     await start_web_server()
     async with bot:
         await bot.start(TOKEN)
+
 
 if __name__ == "__main__":
     if not TOKEN:
         raise RuntimeError("DISCORD_TOKEN is missing.")
 
     asyncio.run(main())
+    
