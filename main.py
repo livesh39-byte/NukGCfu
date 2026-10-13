@@ -43,12 +43,13 @@ active_lock = asyncio.Lock()
 
 @bot.event
 async def on_ready():
+    print(f"Logged in as {bot.user}")
+
     try:
         synced = await bot.tree.sync()
-        print(f"Logged in as {bot.user}")
-        print(f"Synced {len(synced)} slash commands.")
-    except Exception as error:
-        print(f"Slash command sync error: {error}")
+        print(f"Synced {len(synced)} slash commands")
+    except Exception as e:
+        print(f"Slash command sync failed: {e}")
 
 
 @bot.tree.command(
