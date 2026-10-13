@@ -1,17 +1,30 @@
-import os
+from aiohttp import web
 import asyncio
-import time
-import discord
-from discord import app_commands
-from discord.ext import commands
+import os
+
+async def health(request):
+    return web.Response(text="Bot is online")
+
+async def start_web_server():
+    app = web.Application()
+    app.router.add_get("/", health)
+    app.router.add_get("/health", health)
+
+    runner = web.AppRunner(app)
+    await runner.setup()
+
+    port = int(os.environ.get("PORT", 10000))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+
+    print(f"Health server running on port {port}")
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 MAX_MESSAGES = 100
 INTERVAL = 1.0
 USER_COOLDOWN = 1
 
-intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!s", intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned, intents=intents)
 
 user_last_used = {}
 active_tests = set()
@@ -119,8 +132,13 @@ async def botstatus(interaction: discord.Interaction):
         ephemeral=True
 )
     
+    async def main():
+    await start_web_server()
+    async with bot:
+        await bot.start(TOKEN)
+
 if __name__ == "__main__":
     if not TOKEN:
         raise RuntimeError("DISCORD_TOKEN is missing.")
 
-    bot.run(TOKEN)
+    asyncio.run(main())
